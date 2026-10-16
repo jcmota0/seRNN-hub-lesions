@@ -22,8 +22,8 @@ Agreed:
 - Read some literature and come back with 2 or 3 more concrete topics
 
 To do:
-- [ ] Read papers
-- [ ] Find topics that interest me
+- [x] Read papers
+- [x] Find topics that interest me
 
 ## 2. Work log
 
@@ -37,6 +37,11 @@ Then I trained 360 networks, seRNN and L1 (a simple wiring cost that ignores dis
 Compared at the same total connection strength, my seRNNs were more modular, more small-world and had shorter connections than my L1 networks, as the paper reports.
 One thing didn't match: my seRNNs were pruned about half as fast as the authors' at the same cost strength, and I couldn't find out why.
 By the end of the day I had started to doubt the timing question.
+
+### 13-16 October 2026: literature on brain damage and network robustness
+
+Read about how damage affects brain networks and trained artificial networks.
+Whether a wiring cost makes networks more or less robust to damage is an open question, with two competing predictions: the damage spreads out gently, or the hubs make the network fragile.
 
 ## 3. Decisions
 
