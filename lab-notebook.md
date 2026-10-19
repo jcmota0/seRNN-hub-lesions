@@ -25,6 +25,19 @@ To do:
 - [x] Read papers
 - [x] Find topics that interest me
 
+### 19 October 2026
+
+Discussed:
+- The seRNN paper and some ideas for my topic. My first idea was to change the strength of the wiring cost during training, to mimic how connections differ between children and adults (the brain overgrows connections and then prunes them). It didn't seem strong enough, because something similar already happens in the original paper: the cost keeps pruning the network as it trains.
+
+Agreed:
+- Drop the timing idea and look for a question closer to psychology, ideally one that can be compared with patients
+- Bring a short proposal for the new question next time
+
+To do:
+- [ ] Look for a stronger question
+- [ ] Write a proposal for it
+
 ## 2. Work log
 
 ### 12 October 2026: first question and first replication
@@ -36,7 +49,7 @@ I rebuilt the model in PyTorch and checked the pieces against the authors' publi
 Then I trained 360 networks, seRNN and L1 (a simple wiring cost that ignores distance).
 Compared at the same total connection strength, my seRNNs were more modular, more small-world and had shorter connections than my L1 networks, as the paper reports.
 One thing didn't match: my seRNNs were pruned about half as fast as the authors' at the same cost strength, and I couldn't find out why.
-By the end of the day I had started to doubt the timing question.
+By the end of the day I had started to doubt the timing question, and I discussed it with Dr Allefeld on 19 October.
 
 ### 13-16 October 2026: literature on brain damage and network robustness
 
