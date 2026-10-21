@@ -35,8 +35,8 @@ Agreed:
 - Bring a short proposal for the new question next time
 
 To do:
-- [ ] Look for a stronger question
-- [ ] Write a proposal for it
+- [x] Look for a stronger question
+- [x] Write a proposal for it (done 21 Oct: hubs and lesions)
 
 ## 2. Work log
 
@@ -55,6 +55,10 @@ By the end of the day I had started to doubt the timing question, and I discusse
 
 Read about how damage affects brain networks and trained artificial networks.
 Whether a wiring cost makes networks more or less robust to damage is an open question, with two competing predictions: the damage spreads out gently, or the hubs make the network fragile.
+
+### 21 October 2026: proposal for the current question
+
+Wrote the proposal for the current project: do networks that learn many tasks under a wiring cost build connector hubs whose damage causes broad, patient-like deficits?
 
 ## 3. Decisions
 
