@@ -38,6 +38,20 @@ To do:
 - [x] Look for a stronger question
 - [x] Write a proposal for it (done 21 Oct: hubs and lesions)
 
+### 26 October 2026
+
+Discussed:
+- My reading since the last meeting, especially Yang et al. (2019)
+
+Agreed:
+- Read Yang et al. properly, since the new question needs networks that learn many tasks
+- Get the official code running before planning anything bigger
+- Keep a lab notebook of every decision and setting
+
+To do:
+- [ ] Run the official seRNN demo
+- [ ] Get Yang et al.'s code running on my Mac
+
 ## 2. Work log
 
 ### 12 October 2026: first question and first replication
@@ -62,6 +76,16 @@ Wrote the proposal for the current project: do networks that learn many tasks un
 
 ## 3. Decisions
 
+### Count only active units (26 October 2026)
+
+A wiring cost can switch many units off entirely.
+All measures use only active units, and lesions are drawn from active units, so that "how much was damaged" is fair across networks.
+
+### Communicability recomputed every step (26 October 2026)
+
+The seRNN cost depends on communicability, which the original code recomputes at every training step.
+If I recompute it less often to save time, I will record that as a change and check that it doesn't alter the results.
+
 ## 4. Papers
 
 ### Achterberg et al. 2023: spatially embedded RNNs
@@ -77,6 +101,39 @@ Networks with a simple cost (L1) showed none of this.
 
 For my project: I use their wiring cost, but with many tasks, more units (256) and lesions.
 Note: the paper measures modules on all connections weighted by strength, not on the strongest 10% as the demo does.
+
+### Yang et al. 2019: task representations in multitask networks
+
+*Nature Neuroscience.*
+
+What they did: one network trained on 20 cognitive tasks.
+
+What they found: how much each unit's activity varies within each task groups the units into clusters that match shared abilities, such as holding something in memory.
+Switching off a cluster impairs the tasks that use it.
+The units have no positions, so the clusters aren't located anywhere.
+
+For my project: I use their 20 tasks and their activity measure, but give units positions and choose lesions by location or wiring.
+Watch out: "fractional task variance" is a different measure from task variance.
+
+### Liu et al. 2023: growing brains
+
+*OpenReview.*
+
+What they did: a 400-unit, 20-task network on a 2D grid with a distance-based wiring cost.
+
+What they found: clusters of units doing the same tasks ended up close together in space, unlike in networks without the distance cost.
+Only about 100 of the 400 units stayed important.
+
+For my project: a check for my own networks (clusters should end up close together), and a reason to count only active units.
+Watch out: they test whether units are close together, not whether they are wired together.
+
+### Mod-Cog (Khona, Chandra et al.)
+
+What it is: Yang's 20 tasks plus harder versions, 82 tasks in all, that need connections between units to solve.
+
+For my project: forces the networks to use connections between units, which the hub measures need.
+It's slower to train, so the fallback is the 20 tasks plus some of the harder versions.
+To check: the claim that the 20 basic tasks can be solved without connections between units needs a source.
 
 ## 5. Templates for new entries
 
