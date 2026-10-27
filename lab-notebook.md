@@ -49,7 +49,7 @@ Agreed:
 - Keep a lab notebook of every decision and setting
 
 To do:
-- [ ] Run the official seRNN demo
+- [x] Run the official seRNN demo (27 Oct)
 - [ ] Get Yang et al.'s code running on my Mac
 
 ## 2. Work log
@@ -73,6 +73,12 @@ Whether a wiring cost makes networks more or less robust to damage is an open qu
 ### 21 October 2026: proposal for the current question
 
 Wrote the proposal for the current project: do networks that learn many tasks under a wiring cost build connector hubs whose damage causes broad, patient-like deficits?
+
+### 27 October 2026: the authors' demo
+
+Ran the official seRNN demo unchanged (100 units, one maze task, 10 epochs).
+It learned the task perfectly.
+But a single network is only one sample, and the demo is a how-to rather than the paper's full analysis.
 
 ## 3. Decisions
 
