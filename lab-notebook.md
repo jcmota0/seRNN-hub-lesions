@@ -50,7 +50,22 @@ Agreed:
 
 To do:
 - [x] Run the official seRNN demo (27 Oct)
-- [ ] Get Yang et al.'s code running on my Mac
+- [x] Get Yang et al.'s code running on my Mac (2 Nov)
+
+### 2 November 2026
+
+Discussed:
+- My plan for the hubs and lesions project, and the first run of Yang et al.'s code on my Mac (about 2 hours per network, all 20 tasks learned)
+- Some details I had to fix after checking the plan against the code, like what switching off a unit actually means
+
+Agreed:
+- Make sure I really understand the seRNN before building on it
+- Decide the number of networks later, once I know how fast they train
+
+To do:
+- [ ] Rebuild the seRNN parts myself to understand them
+- [ ] Decide which tools to use
+- [ ] Check the demo across many networks
 
 ## 2. Work log
 
@@ -80,6 +95,13 @@ Ran the official seRNN demo unchanged (100 units, one maze task, 10 epochs).
 It learned the task perfectly.
 But a single network is only one sample, and the demo is a how-to rather than the paper's full analysis.
 
+### 2 November 2026: the 20-task networks
+
+Got Yang et al.'s (2019) 20-task code running on my MacBook.
+One network trained in about 2 hours and learned all 20 tasks to at least 90% accuracy, within the range of the authors' own networks.
+Also downloaded their 40 trained networks, to test my analysis code against later.
+Checked my plan against the official code of both papers and corrected several details, such as how a lesion is defined.
+
 ## 3. Decisions
 
 ### Count only active units (26 October 2026)
@@ -91,6 +113,12 @@ All measures use only active units, and lesions are drawn from active units, so 
 
 The seRNN cost depends on communicability, which the original code recomputes at every training step.
 If I recompute it less often to save time, I will record that as a change and check that it doesn't alter the results.
+
+### Waiting to agree with my supervisor
+
+- [ ] Self-connections switched off in every version, so no version gets them for free.
+- [ ] The wiring cost averaged rather than summed over connections, so its strength means the same in networks of different sizes.
+- [ ] How many cost strengths and random starting points to train.
 
 ## 4. Papers
 
@@ -140,6 +168,34 @@ What it is: Yang's 20 tasks plus harder versions, 82 tasks in all, that need con
 For my project: forces the networks to use connections between units, which the hub measures need.
 It's slower to train, so the fallback is the 20 tasks plus some of the harder versions.
 To check: the claim that the 20 basic tasks can be solved without connections between units needs a source.
+
+### Warren et al. 2014
+
+To read.
+
+### Woolgar et al. 2018
+
+To read.
+
+### Béna & Goodman 2025
+
+*Nature Communications.*
+
+To read.
+First impression: networks with modules built in by hand don't automatically divide the work between the modules; that mainly happens when the task can be split and resources are tight.
+For my project: measure structural and functional modules separately.
+
+### Driscoll, Shenoy & Sussillo 2024
+
+*Nature Neuroscience.*
+
+To read.
+First impressions:
+
+- Networks trained on 15 tasks reuse the same building blocks across tasks that need the same computation, such as remembering a direction.
+- These building blocks match groups of units only when unit activity can't go negative, which supports using ReLU units.
+- Switching off one group impairs only the tasks that use that building block.
+- The units have no positions.
 
 ## 5. Templates for new entries
 
