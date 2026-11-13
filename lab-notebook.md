@@ -63,8 +63,8 @@ Agreed:
 - Decide the number of networks later, once I know how fast they train
 
 To do:
-- [ ] Rebuild the seRNN parts myself to understand them
-- [ ] Decide which tools to use
+- [x] Rebuild the seRNN parts myself to understand them
+- [x] Decide which tools to use (13 Nov)
 - [ ] Check the demo across many networks
 
 ## 2. Work log
@@ -102,6 +102,15 @@ One network trained in about 2 hours and learned all 20 tasks to at least 90% ac
 Also downloaded their 40 trained networks, to test my analysis code against later.
 Checked my plan against the official code of both papers and corrected several details, such as how a lesion is defined.
 
+### 2-13 November 2026: rebuilding the seRNN myself
+
+To understand how the model works, I rebuilt its parts step by step: the maze task, the 3D grid of units and the distances between them, the communicability measure, and the wiring cost.
+A check on 3 units gave the expected cost and gradient.
+
+### 13 November 2026: tools
+
+Decided to build on the authors' own code in TensorFlow rather than rewrite it (see Decisions).
+
 ## 3. Decisions
 
 ### Count only active units (26 October 2026)
@@ -113,6 +122,16 @@ All measures use only active units, and lesions are drawn from active units, so 
 
 The seRNN cost depends on communicability, which the original code recomputes at every training step.
 If I recompute it less often to save time, I will record that as a change and check that it doesn't alter the results.
+
+### Build on the authors' code, in TensorFlow (13 November 2026)
+
+Yang et al.'s code already has the 20 tasks, training, the activity measures and lesions, and runs on my MacBook.
+I'm not a computer science student, so reusing tested code is safer than rewriting it.
+New code: the seRNN wiring cost, hub measures and spatial lesions.
+
+### Number of networks set by measured speed (13 November 2026)
+
+To be fixed once I know how fast networks train on my two Macs and how much time is left.
 
 ### Waiting to agree with my supervisor
 
