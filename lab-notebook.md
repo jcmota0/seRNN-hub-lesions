@@ -65,7 +65,7 @@ Agreed:
 To do:
 - [x] Rebuild the seRNN parts myself to understand them
 - [x] Decide which tools to use (13 Nov)
-- [ ] Check the demo across many networks
+- [x] Check the demo across many networks (17 Nov)
 
 ## 2. Work log
 
@@ -110,6 +110,20 @@ A check on 3 units gave the expected cost and gradient.
 ### 13 November 2026: tools
 
 Decided to build on the authors' own code in TensorFlow rather than rewrite it (see Decisions).
+
+### 17 November 2026: checking the demo across many networks
+
+Trained about 130 small networks with the demo code, with 5-10 random starting points per setting.
+
+- Some networks get stuck at about 62% accuracy, even with no wiring cost.
+  At the demo's cost strength (0.5) most get stuck, so the demo's perfect result on 27 October was partly luck.
+  A strength of 0.2 worked for 9 out of 10 networks.
+- In seRNNs, long connections are clearly weaker than short ones.
+  With the simple L1 cost, distance makes no difference.
+- Modules did not show up, because I used the demo's way of measuring them (only the strongest 10% of connections).
+  The paper measures them on all connections weighted by strength, and with that method they do show up (see 12 October).
+
+Code written with AI assistance.
 
 ## 3. Decisions
 
