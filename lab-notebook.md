@@ -67,6 +67,21 @@ To do:
 - [x] Decide which tools to use (13 Nov)
 - [x] Check the demo across many networks (17 Nov)
 
+### 19 November 2026
+
+Discussed:
+- My check of the seRNN demo across many networks: long connections are clearly weaker, but some networks get stuck and whether modules show up depends on how you measure them
+- Building on the authors' code in TensorFlow instead of writing my own
+
+Agreed:
+- Redo the replication of the seRNN paper step by step so I can explain every part of it
+- Use the authors' CodeOcean capsule, and MATLAB through the uni, for their analysis
+- After that, add the seRNN wiring cost to Yang et al.'s 20-task networks
+
+To do:
+- [ ] Reproduce the seRNN paper's results with the authors' capsule, step by step
+- [ ] Agree on self-connections, cost scaling and number of networks
+
 ## 2. Work log
 
 ### 12 October 2026: first question and first replication
@@ -77,7 +92,7 @@ Before that, I needed to know I could trust my version of the model.
 I rebuilt the model in PyTorch and checked the pieces against the authors' published materials: the task, the wiring cost and the network measures all matched.
 Then I trained 360 networks, seRNN and L1 (a simple wiring cost that ignores distance).
 Compared at the same total connection strength, my seRNNs were more modular, more small-world and had shorter connections than my L1 networks, as the paper reports.
-One thing didn't match: my seRNNs were pruned about half as fast as the authors' at the same cost strength, and I couldn't find out why.
+One thing didn't match: my seRNNs were pruned about half as fast as the authors' at the same cost strength, and I couldn't find out why (solved on 19 November).
 By the end of the day I had started to doubt the timing question, and I discussed it with Dr Allefeld on 19 October.
 
 ### 13-16 October 2026: literature on brain damage and network robustness
@@ -125,6 +140,74 @@ Trained about 130 small networks with the demo code, with 5-10 random starting p
 
 Code written with AI assistance.
 
+### 19 November 2026: clean start, the authors' capsule, and my own networks
+
+Set up this repository and notebook from scratch.
+Decided to redo the replication of the seRNN paper step by step, so I can explain every part of it myself instead of just running someone else's pipeline.
+
+**The authors' capsule.**
+Downloaded the authors' CodeOcean capsule.
+It has their training demo, their analysis scripts (in MATLAB) and all their trained networks: 1,001 seRNN and 1,001 L1 networks, plus smaller sets of other variants.
+Their official route only trains one demo network and then remakes the paper's figures from their saved networks, so it never checks that newly trained networks behave the same.
+
+**Reproducing their figures.**
+Ran their figure script (`figure_replication_code.m`) section by section in MATLAB (R2026b, with the Statistics and Machine Learning Toolbox, which their scripts need for correlations).
+To run it outside their Docker setup I only changed where it looks for the data and where it saves the pictures, not the analysis.
+Reproduced the paper's main structural figures from their saved networks:
+
+- Accuracy: seRNN and L1 networks learn the task equally well, from about 57% to about 100% over 10 epochs (only networks that end above 90% are included).
+- Example seRNN (network 290): connection strength goes down with distance, r = -0.43.
+  The strongest connections are self-connections, which cost nothing because their distance is 0, and they are included in that r.
+- Across all networks: seRNNs end with a weight-distance correlation of about -0.3 (L1 about 0), modularity of about 0.37 (L1 about 0.16) and small-worldness of about 2.3 (L1 about 2.0).
+  seRNNs actually keep a bit more total weight than L1, so the extra modularity is not just from having fewer connections.
+
+**Checking their numbers.**
+These figures use numbers the authors computed earlier with another script (`computing_topology.m`), so I checked those numbers myself.
+Wrote `replication/check_topology.m`, which takes 10 random seRNN and 10 random L1 networks at the end of training and recomputes the four measures with the authors' own lines of code.
+Total weight, weight-distance correlation and modularity matched exactly in all 20 networks.
+Small-worldness matched within about 0.5%, which is expected because it is compared against randomly generated networks.
+
+Things I noticed:
+
+- The network number goes with cost strength: low numbers have weak costs and keep lots of weight, high numbers are pruned hard.
+- The most heavily pruned seRNNs (total weight about 30) have modularity of about 0.96.
+  These aren't real modules: the network has just fallen apart into disconnected pieces.
+  So only networks that still do the task should be compared, and in my project I need to check that networks haven't fallen apart before looking for hubs.
+- Self-connections are free under the seRNN cost, which is the same issue I need to agree with my supervisor for my own networks.
+
+**Training my own networks.**
+Set up a Python environment for the project (`requirements.txt`) and wrote `replication/train_networks.py`.
+It runs the authors' training code unchanged (copied into `replication/authors_code.py`) with their settings: 100 units, 10 epochs, 5,120 training problems.
+Each of my networks uses the same cost strength as one of theirs, so it has a "twin" in their data.
+I trained every 10th one: 101 seRNN and 101 L1 networks, about 2 seconds each.
+
+**A problem with the cost strengths.**
+My L1 networks matched their twins, but my seRNNs didn't.
+At the strongest costs their seRNNs were pruned down to a total weight of about 30 and failed the task, while mine kept 90-290 and still learned it.
+Their saved data says the seRNN cost strengths went from 0.001 to 0.3, but the text in their other notebook (`recording_decoding_demo.ipynb`) says 0.000001 to 1.
+When I trained with the notebook's strengths instead, my seRNNs matched their twins (for example 32 vs 30 total weight, both stuck at about 62%).
+So it looks like the strengths stored in their data file are mislabelled, and they really trained with 0.000001 to 1.
+This probably also explains why my networks on 12 October pruned slower than theirs.
+To do: check which range the published paper reports.
+
+**Comparing my networks with theirs.**
+With the notebook's strengths, compared all 202 networks with their twins in MATLAB (`replication/compare_twins.m`, using the authors' code for the measures).
+Total weight tracks the twin closely (r = 0.97 for L1, 0.94 for seRNN).
+Individual pairs differ more for modularity and accuracy, because whether a network gets stuck or falls apart is partly random, and my random seeds are different from theirs.
+
+The main result, using only networks that learned the task (at least 90%), at the end of training:
+
+| | Weight-distance r | Modularity | Small-worldness |
+|---|---|---|---|
+| Mine, L1 (53 networks) | -0.02 | 0.16 | 1.89 |
+| Mine, seRNN (41) | -0.32 | 0.39 | 2.29 |
+| Theirs, L1 (46) | -0.01 | 0.14 | 1.96 |
+| Theirs, seRNN (31) | -0.32 | 0.31 | 2.41 |
+
+My networks reproduce the paper's structural results: like theirs, seRNNs wire more locally, are more modular and are more small-world than L1 networks.
+
+Next: add statistics like the paper (t-tests and effect sizes), and check the strength range in the published paper.
+
 ## 3. Decisions
 
 ### Count only active units (26 October 2026)
@@ -168,6 +251,7 @@ Networks with a simple cost (L1) showed none of this.
 
 For my project: I use their wiring cost, but with many tasks, more units (256) and lesions.
 Note: the paper measures modules on all connections weighted by strength, not on the strongest 10% as the demo does.
+Note: their saved data and their notebook disagree on the seRNN cost strengths (see 19 November).
 
 ### Yang et al. 2019: task representations in multitask networks
 
