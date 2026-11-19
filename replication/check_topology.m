@@ -1,8 +1,13 @@
 %% Recompute the authors' topology measures on a sample of their networks,
 %% and compare with the values they stored.
-% Run after loading network_data (the loading section of figure_replication_code.m).
 
-addpath(genpath('/Users/jcmota0/seRNN-capsule/data/prerequisites'));
+%% Where things are: change these if your folders are elsewhere
+capsule_path = fullfile(getenv('HOME'), 'seRNN-capsule');   % the authors' CodeOcean capsule, unzipped
+
+addpath(genpath(fullfile(capsule_path, 'data', 'prerequisites')));   % Brain Connectivity Toolbox
+if ~exist('network_data', 'var')   % load the authors' networks if they aren't loaded yet (~1 min)
+    load(fullfile(capsule_path, 'data', 'derivatives', 'network_data.mat'));
+end
 
 rng(1);          % fixed random seed, so the check gives the same result every time
 nsample = 10;    % networks per group

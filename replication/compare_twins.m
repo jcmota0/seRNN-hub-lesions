@@ -3,12 +3,17 @@
 % (same network number). For every pair, this computes the paper's measures on my
 % network at the end of training, with the authors' own lines of code, and puts them
 % next to the values the authors stored.
-%
-% Run after loading network_data (the loading section of figure_replication_code.m).
 
-addpath(genpath('/Users/jcmota0/seRNN-capsule/data/prerequisites'));
+%% Where things are: change these if your folders are elsewhere
+capsule_path = fullfile(getenv('HOME'), 'seRNN-capsule');   % the authors' CodeOcean capsule, unzipped
+my_folder = fullfile(getenv('HOME'), 'seRNN-runs-notebook');  % my networks (train_networks.py --strengths notebook)
+results_path = fullfile(capsule_path, 'results');               % where the figure is saved
 
-my_folder = '/Users/jcmota0/seRNN-runs-notebook';   % networks trained with --strengths notebook
+addpath(genpath(fullfile(capsule_path, 'data', 'prerequisites')));   % Brain Connectivity Toolbox
+if ~exist('network_data', 'var')   % load the authors' networks if they aren't loaded yet (~1 min)
+    load(fullfile(capsule_path, 'data', 'derivatives', 'network_data.mat'));
+end
+
 epoch = 11;          % end of training (1 = before training)
 nperm = 1000;        % random comparison networks for small-worldness, as in the paper
 accthr = 0.9;        % the paper's threshold for "learned the task"
@@ -93,4 +98,5 @@ for k = 1:4
     axis square; box off;
 end
 legend(my_names, 'Location', 'best');
-saveas(gcf, '/Users/jcmota0/seRNN-capsule/results/compare_twins.png');
+if ~exist(results_path, 'dir'), mkdir(results_path); end
+saveas(gcf, fullfile(results_path, 'compare_twins.png'));
