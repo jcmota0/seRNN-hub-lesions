@@ -1,0 +1,6 @@
+# Python 3.13. Versions under which the authors' seRNN code is known to run on Apple Silicon.
+tensorflow==2.21.0
+numpy==2.5.4
+pandas==3.1.0
+scipy==1.18.1
+matplotlib==3.11.2
